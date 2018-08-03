@@ -1,0 +1,113 @@
+buildscript {
+    ext {
+        springCloudVersion = 'Finchley.RELEASE'
+        springBootVersion = '2.0.4.RELEASE'
+        lombokVersion = "1.16.20"
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+allprojects {
+    version = "2.0.0"
+}
+
+subprojects {
+    apply plugin: "java"
+    apply plugin: 'idea'
+    apply plugin: "org.springframework.boot"
+    apply plugin: "io.spring.dependency-management"
+
+    sourceCompatibility = '1.8'
+    targetCompatibility = '1.8'
+
+    def defaultEncoding = 'UTF-8'
+    tasks.withType(AbstractCompile).each { it.options.encoding = defaultEncoding }
+
+    javadoc {
+        options.encoding = defaultEncoding
+        options.addBooleanOption('Xdoclint:none', true)
+    }
+
+    compileJava.dependsOn(processResources)
+
+    test {
+        include "**/model/**", "**/controller/**", "**/usecase/**", "**/util/**", "**/context/**"
+    }
+
+    springBoot {
+        buildInfo()
+    }
+
+    repositories {
+        mavenCentral()
+    }
+
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+            mavenBom "org.springframework.boot:spring-boot-starter-parent:${springBootVersion}"
+        }
+    }
+
+    dependencies {
+        testCompile "org.springframework.boot:spring-boot-starter-test"
+
+//        annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+//        compileOnly "org.projectlombok:lombok:${lombokVersion}"
+//        compile "org.springframework.cloud:spring-cloud-starter-netflix-eureka-client"
+//        compile "org.springframework.cloud:spring-cloud-starter-openfeign"
+//        compile "org.springframework.cloud:spring-cloud-starter-sleuth"
+//        compile "org.springframework.boot:spring-boot-starter-actuator"
+//        compile "org.springframework.boot:spring-boot-starter-security"
+//        compile "org.springframework.boot:spring-boot-starter-aop"
+//        compile "org.springframework.boot:spring-boot-starter-cache"
+//        compile "org.springframework.boot:spring-boot-starter-data-jpa"
+//        compile "org.springframework.boot:spring-boot-starter-web"
+//        compile "org.ehcache:ehcache"
+//        compile "javax.cache:cache-api"
+//        compile "com.fasterxml.jackson.datatype:jackson-datatype-hibernate5"
+//        compile "org.eclipse.collections:eclipse-collections:9.2.0"
+//        compile "org.eclipse.collections:eclipse-collections-api:9.2.0"
+//        compile "commons-io:commons-io:2.6"
+//        compile "org.apache.commons:commons-lang3"
+//        compile "com.ibm.icu:icu4j:62.1"
+//        compile "org.jolokia:jolokia-core:1.6.0"
+//        compile fileTree(dir: 'libs', includes: ['*.jar'])
+//        runtime "com.h2database:h2"
+//        testAnnotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+//        testCompileOnly "org.projectlombok:lombok:${lombokVersion}"
+    }
+    // 显示当前项目下所有用于 compile 的 jar.
+//    task listJars(description: 'Display all compile jars.') << {
+//        configurations.compile.each { File file -> println file.name }
+//    }
+}
+
+//project(':micro-app') {
+//    dependencies {
+//        compile project(':micro-core')
+//    }
+//}
+//
+//project(':micro-asset') {
+//    dependencies {
+//        compile project(':micro-core')
+//    }
+//}
+//
+//project(':micro-web') {
+//    dependencies {
+//        compile project(':micro-core')
+//        compile project(':micro-asset')
+//    }
+//}
+
+wrapper {
+    gradleVersion = "4.8.1"
+}
+

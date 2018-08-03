@@ -1,0 +1,10 @@
+group = 'com.baodooer.eureka'
+version = '0.0.1-SNAPSHOT'
+
+bootJar {
+	mainClassName = 'com.baodooer.server.EurekaServerApplication'
+}
+
+dependencies {
+	compile 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+}
